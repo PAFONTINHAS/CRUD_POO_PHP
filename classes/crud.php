@@ -29,7 +29,12 @@ class Crud{
         $stmt->bindParam(4, $num_discos);
         $stmt->bindParam(5, $qtd_albuns);
 
+        $rows= $this->read();
+
         if ($stmt->execute()){
+
+            print"<script>alert('Cadastro realizado com sucesso');</script>";
+            print"<script>location.href='?action=read';</script>";
             return true;
         } else {
             return false;
@@ -45,7 +50,18 @@ class Crud{
     }
 
     // funcao para atualizar os registros
-    public function update($id,$nome,$genero,$gravadora,$num_discos,$qtd_albuns){
+    public function update($postValues){
+
+        $id = $postValues['id'];
+        $nome = $postValues['nome'];
+        $genero = $postValues['genero'];
+        $gravadora = $postValues['gravadora'];
+        $num_discos = $postValues['num_discos'];
+        $qtd_albuns = $postValues['qtd_albuns'];
+
+        if(empty($id) || empty($nome) || empty($genero) || empty($num_discos) || empty($gravadora) || empty($qtd_albuns)){
+            return false;
+        }
         $query = "UPDATE ". $this->table_name . " SET nome = ?, genero = ?, gravadora = ?, num_discos =  ?, qtd_albuns = ? WHERE  id = ?";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(1,$nome);
@@ -56,6 +72,8 @@ class Crud{
         $stmt->bindParam(6,$id);
 
         if($stmt->execute()){
+            print"<script>alert('Registro Atualizado com sucesso');</script>";
+            print"<script>location.href='?action=read';</script>";
             return true;
         } else {
             return false;
@@ -67,11 +85,17 @@ class Crud{
         $query = "DELETE FROM ". $this->table_name. " WHERE id = ?";
         $stmt = $this->conn->prepare($query);
         $stmt->bindParam(1,$id);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
 
-        if($stmt->execute()){
-            return true;
-        } else {
-            return false;
-        }
+
+    public function readOne($id){
+
+        $query = "SELECT * FROM ". $this->table_name . " WHERE id = ?";
+        $stmt = $this->conn->prepare($query);
+        $stmt -> bindParam(1,$id);
+        $stmt->execute();
+        return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 }
