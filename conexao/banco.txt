@@ -1,0 +1,12 @@
+CREATE DATABASE crud_poo
+
+
+CREATE TABLE banda{
+
+    id INT PRIMARY KEY AUTO_INCREMENT NOT NULL,
+    nome VARCHAR(100) NOT NULL,
+    genero VARCHAR(100) NOT NULL,
+    gravadora VARCHAR(100) NOT NULL
+    num_discos INT NOT NULL,
+    qtd_albuns INT NOT NULL
+}
